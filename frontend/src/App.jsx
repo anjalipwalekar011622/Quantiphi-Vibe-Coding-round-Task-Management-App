@@ -8,12 +8,21 @@ function App() {
   const [users, setUsers] = useState([]);
   const [filterPriority, setFilterPriority] = useState('All');
   const [showModal, setShowModal] = useState(false);
+  const [isLightMode, setIsLightMode] = useState(false);
   
   const columns = ['To-Do', 'In Progress', 'Done'];
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (isLightMode) {
+      document.body.classList.add('light-mode');
+    } else {
+      document.body.classList.remove('light-mode');
+    }
+  }, [isLightMode]);
 
   const fetchData = async () => {
     try {
@@ -100,6 +109,13 @@ function App() {
             </div>
           ))}
         </div>
+        <button 
+          className="btn btn-secondary" 
+          onClick={() => setIsLightMode(!isLightMode)}
+          style={{ marginLeft: '1rem' }}
+        >
+          {isLightMode ? '🌙 Dark Mode' : '☀️ Light Mode'}
+        </button>
       </header>
 
       <div className="controls">
@@ -141,7 +157,16 @@ function App() {
                     <span className={`priority-tag priority-${task.priority.toLowerCase()}`}>
                       {task.priority}
                     </span>
-                    {task.user_name && <span>👤 {task.user_name}</span>}
+                    {task.user_name && (() => {
+                      const assignedUser = users.find(u => u.name === task.user_name);
+                      const color = assignedUser ? assignedUser.avatar_color : '#ccc';
+                      return (
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: color, display: 'inline-block' }}></span>
+                          {task.user_name}
+                        </span>
+                      );
+                    })()}
                   </div>
                 </div>
               ))}
