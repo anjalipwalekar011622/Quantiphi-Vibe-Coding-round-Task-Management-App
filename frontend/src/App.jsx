@@ -8,7 +8,9 @@ function App() {
   const [users, setUsers] = useState([]);
   const [filterPriority, setFilterPriority] = useState('All');
   const [showModal, setShowModal] = useState(false);
-  const [isLightMode, setIsLightMode] = useState(false);
+  const [isLightMode, setIsLightMode] = useState(() => {
+    return localStorage.getItem('theme') === 'light';
+  });
   
   const columns = ['To-Do', 'In Progress', 'Done'];
 
@@ -19,8 +21,10 @@ function App() {
   useEffect(() => {
     if (isLightMode) {
       document.body.classList.add('light-mode');
+      localStorage.setItem('theme', 'light');
     } else {
       document.body.classList.remove('light-mode');
+      localStorage.setItem('theme', 'dark');
     }
   }, [isLightMode]);
 
