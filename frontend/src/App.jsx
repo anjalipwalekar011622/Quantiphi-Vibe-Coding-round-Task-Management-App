@@ -8,6 +8,8 @@ function App() {
   const [users, setUsers] = useState([]);
   const [filterPriority, setFilterPriority] = useState('All');
   const [showModal, setShowModal] = useState(false);
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [projects, setProjects] = useState([]);
   const [isLightMode, setIsLightMode] = useState(() => {
     return localStorage.getItem('theme') === 'light';
   });
@@ -30,14 +32,17 @@ function App() {
 
   const fetchData = async () => {
     try {
-      const [tasksRes, usersRes] = await Promise.all([
+      const [tasksRes, usersRes, projectsRes] = await Promise.all([
         fetch(`${API_BASE}/tasks`),
-        fetch(`${API_BASE}/users`)
+        fetch(`${API_BASE}/users`),
+        fetch(`${API_BASE}/projects`)
       ]);
       const tasksData = await tasksRes.json();
       const usersData = await usersRes.json();
+      const projectsData = await projectsRes.json();
       setTasks(tasksData);
       setUsers(usersData);
+      setProjects(projectsData);
     } catch (err) {
       console.error("Error fetching data:", err);
     }
@@ -92,6 +97,23 @@ function App() {
     }
   };
 
+  const handleAddUserToProject = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    try {
+      await fetch(`${API_BASE}/project-users`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      setShowUserModal(false);
+      alert('User successfully added to project!');
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const filteredTasks = filterPriority === 'All' 
     ? tasks 
     : tasks.filter(t => t.priority === filterPriority);
@@ -124,6 +146,7 @@ function App() {
 
       <div className="controls">
         <button className="btn" onClick={() => setShowModal(true)}>+ Create Task</button>
+        <button className="btn btn-secondary" onClick={() => setShowUserModal(true)}>+ Add User to Project</button>
         <select value={filterPriority} onChange={(e) => setFilterPriority(e.target.value)}>
           <option value="All">All Priorities</option>
           <option value="High">High</option>
@@ -228,6 +251,31 @@ function App() {
               <div className="modal-actions">
                 <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Cancel</button>
                 <button type="submit" className="btn">Create Task</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {showUserModal && (
+        <div className="modal-overlay" onClick={() => setShowUserModal(false)}>
+          <div className="modal" onClick={e => e.stopPropagation()}>
+            <h2>Add User to Project</h2>
+            <form onSubmit={handleAddUserToProject}>
+              <div className="form-group">
+                <label>Select User</label>
+                <select name="user_id" required>
+                  {users.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Select Project</label>
+                <select name="project_id" required>
+                  {projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                </select>
+              </div>
+              <div className="modal-actions">
+                <button type="button" className="btn btn-secondary" onClick={() => setShowUserModal(false)}>Cancel</button>
+                <button type="submit" className="btn">Add to Project</button>
               </div>
             </form>
           </div>

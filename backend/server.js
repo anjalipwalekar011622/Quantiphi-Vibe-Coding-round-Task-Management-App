@@ -134,6 +134,20 @@ app.delete('/api/tasks/:id', async (req, res) => {
   }
 });
 
+// Add a user to a project
+app.post('/api/project-users', async (req, res) => {
+  const { project_id, user_id } = req.body;
+  try {
+    const result = await pool.query(
+      'INSERT INTO project_users (project_id, user_id) VALUES ($1, $2) ON CONFLICT DO NOTHING RETURNING *',
+      [project_id, user_id]
+    );
+    res.status(201).json(result.rows[0] || { message: 'User already in project' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Endpoint for Workload Balancing column counts
 app.get('/api/board-stats', async (req, res) => {
   try {
