@@ -118,7 +118,7 @@ function App() {
           onClick={() => setIsLightMode(!isLightMode)}
           style={{ marginLeft: '1rem' }}
         >
-          {isLightMode ? '🌙 Dark Mode' : '☀️ Light Mode'}
+          {isLightMode ? <><span style={{ color: '#a78bfa', fontSize: '1.2em', marginRight: '4px' }}>☾</span> Dark Mode</> : '☀️ Light Mode'}
         </button>
       </header>
 
