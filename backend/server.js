@@ -134,15 +134,15 @@ app.delete('/api/tasks/:id', async (req, res) => {
   }
 });
 
-// Add a user to a project
+// Add a user to a project with permissions
 app.post('/api/project-users', async (req, res) => {
-  const { project_id, user_id } = req.body;
+  const { project_id, user_id, permission } = req.body;
   try {
     const result = await pool.query(
-      'INSERT INTO project_users (project_id, user_id) VALUES ($1, $2) ON CONFLICT DO NOTHING RETURNING *',
-      [project_id, user_id]
+      'INSERT INTO project_users (project_id, user_id, permission) VALUES ($1, $2, $3) ON CONFLICT (project_id, user_id) DO UPDATE SET permission = $3 RETURNING *',
+      [project_id, user_id, permission || 'Editor']
     );
-    res.status(201).json(result.rows[0] || { message: 'User already in project' });
+    res.status(201).json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

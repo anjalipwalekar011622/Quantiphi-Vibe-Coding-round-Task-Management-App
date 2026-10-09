@@ -273,6 +273,14 @@ function App() {
                   {projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                 </select>
               </div>
+              <div className="form-group">
+                <label>Permission Level</label>
+                <select name="permission" required>
+                  <option value="Admin">Admin</option>
+                  <option value="Editor" selected>Editor</option>
+                  <option value="Viewer">Viewer</option>
+                </select>
+              </div>
               <div className="modal-actions">
                 <button type="button" className="btn btn-secondary" onClick={() => setShowUserModal(false)}>Cancel</button>
                 <button type="submit" className="btn">Add to Project</button>
