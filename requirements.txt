@@ -1,0 +1,14 @@
+# System Requirements
+Node.js >= 18.0.0
+Docker (for PostgreSQL)
+
+# Backend Dependencies (npm install in /backend)
+express
+pg (node-postgres)
+cors
+dotenv
+
+# Frontend Dependencies (npm install in /frontend)
+react
+react-dom
+vite
