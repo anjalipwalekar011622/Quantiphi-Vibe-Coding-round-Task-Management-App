@@ -168,6 +168,11 @@ function App() {
                       );
                     })()}
                   </div>
+                  
+                  <div className="task-meta" style={{ marginTop: '0.5rem', flexDirection: 'column', alignItems: 'flex-start', gap: '0.25rem' }}>
+                    {task.created_at && <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Assigned: {new Date(task.created_at).toLocaleDateString()}</span>}
+                    {task.due_date && <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Due: {new Date(task.due_date).toLocaleDateString()}</span>}
+                  </div>
                 </div>
               ))}
             </div>
@@ -195,6 +200,10 @@ function App() {
                   <option value="Medium" selected>Medium</option>
                   <option value="Low">Low</option>
                 </select>
+              </div>
+              <div className="form-group">
+                <label>Due Date</label>
+                <input type="date" name="due_date" required />
               </div>
               <div className="form-group">
                 <label>Assign To</label>

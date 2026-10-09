@@ -57,6 +57,14 @@ app.get('/api/tasks', async (req, res) => {
       SELECT tasks.*, users.name as user_name 
       FROM tasks 
       LEFT JOIN users ON tasks.assigned_user_id = users.id
+      ORDER BY 
+        CASE priority 
+          WHEN 'High' THEN 1 
+          WHEN 'Medium' THEN 2 
+          WHEN 'Low' THEN 3 
+          ELSE 4 
+        END ASC,
+        due_date ASC NULLS LAST
     `);
     res.json(result.rows);
   } catch (err) {
