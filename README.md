@@ -10,6 +10,8 @@ A highly interactive, full-stack Kanban-style task management application built 
 ## ✨ Core Features
 * **Interactive Kanban Board:** Native HTML5 drag-and-drop capability between 'To-Do', 'In Progress', and 'Done' columns.
 * **Intelligent Sorting:** Tasks are automatically sorted server-side by Priority (High > Medium > Low) and then by Due Date, stacking the most critical tasks at the top.
+* **Task Dates:** Every task tracks both the Assigned Date and the Due Date.
+* **Project Associations & Permissions:** Dedicated UI controls and API routes for assigning users to projects with granular permission levels (Admin, Editor, Viewer), satisfying strict relational data constraints.
 * **The "Vibe Check" (Burnout Warning):** As per requirements, the backend calculates the number of "In Progress" tasks for each user. If a user has > 5 tasks in progress, their avatar pulses red on the frontend to warn of potential burnout.
 * **Persistent Themes:** Seamless Light and Dark mode toggling that saves directly to `localStorage`.
 * **Relational Logic:** PostgreSQL elegantly handles the relationships between Projects, Users, and Tasks using Foreign Keys and Cascades.
